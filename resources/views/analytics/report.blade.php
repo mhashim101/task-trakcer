@@ -77,7 +77,17 @@
                 const startDate = document.getElementById('start-date').value;
                 const endDate = document.getElementById('end-date').value;
 
-                fetch('/analytics/generate-report', {
+
+                const userRole = "{{ Auth::user()->role->id }}"; // Assuming you have a relationship like: User belongsTo Role
+                let baseUrl = '';
+
+                if (userRole == 1) {
+                    baseUrl = '/admin/analytics/generate-report';
+                } else if (userRole == 2) {
+                    baseUrl = '/team-lead/analytics/generate-report';
+                }
+
+                fetch(baseUrl, {
                     method: 'POST',
                     body: formData,
                     headers: {

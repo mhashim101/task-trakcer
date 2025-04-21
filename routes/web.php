@@ -31,8 +31,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('teams', TeamController::class);
     Route::get('/member-analytics', [AdminController::class, 'memberAnalytics'])->name('admin.member-analytics');
-    Route::get('/generate-report', [AdminController::class, 'generateReport'])->name('admin.generate-report');
+    Route::get('/analytics/generate-report', [AdminController::class, 'generateReport'])->name('admin.generate-report');
     Route::get('/analytics/member-performance', [AnalyticsController::class, 'memberPerformance'])->name('admin.analytics.member-performance');
+    Route::post('/analytics/generate-report', [AnalyticsController::class, 'generateReport'])->name('admin.analytics.generate-report');
 });
 
 // Team Lead Routes
@@ -41,9 +42,9 @@ Route::prefix('team-lead')->middleware(['auth', 'role:team_lead'])->group(functi
     // Route::resource('tasks', TaskController::class)->except(['index', 'show']);
     Route::resource('tasks', TaskController::class);
     Route::get('/analytics/member-performance', [AnalyticsController::class, 'memberPerformance'])->name('analytics.member-performance');
-    Route::post('/generate-report', [AnalyticsController::class, 'generateReport'])->name('analytics.generate-report');
+    Route::post('/analytics/generate-report', [AnalyticsController::class, 'generateReport'])->name('team-lead.analytics.generate-report');
     Route::get('/member-analytics', [TeamLeadController::class, 'memberAnalytics'])->name('team-lead.member-analytics');
-    Route::get('/generate-report', [TeamLeadController::class, 'generateReport'])->name('team-lead.generate-report');
+    Route::get('/analytics/generate-report', [TeamLeadController::class, 'generateReport'])->name('team-lead.generate-report');
 });
 
 // Team Member Routes
