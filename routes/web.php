@@ -1,0 +1,67 @@
+<?php
+
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TeamLeadController;
+use App\Http\Controllers\TeamMemberController;
+use Illuminate\Support\Facades\Route;
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    } elseif ($user->isTeamLead()) {
+        return redirect()->route('team-lead.dashboard');
+    } else {
+        return redirect()->route('team-member.dashboard');
+    }
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Admin Routes
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::resource('teams', TeamController::class);
+    Route::get('/member-analytics', [AdminController::class, 'memberAnalytics'])->name('admin.member-analytics');
+    Route::get('/generate-report', [AdminController::class, 'generateReport'])->name('admin.generate-report');
+    Route::get('/analytics/member-performance', [AnalyticsController::class, 'memberPerformance'])->name('admin.analytics.member-performance');
+});
+
+// Team Lead Routes
+Route::prefix('team-lead')->middleware(['auth', 'role:team_lead'])->group(function () {
+    Route::get('/dashboard', [TeamLeadController::class, 'dashboard'])->name('team-lead.dashboard');
+    // Route::resource('tasks', TaskController::class)->except(['index', 'show']);
+    Route::resource('tasks', TaskController::class);
+    Route::get('/analytics/member-performance', [AnalyticsController::class, 'memberPerformance'])->name('analytics.member-performance');
+    Route::post('/generate-report', [AnalyticsController::class, 'generateReport'])->name('analytics.generate-report');
+    Route::get('/member-analytics', [TeamLeadController::class, 'memberAnalytics'])->name('team-lead.member-analytics');
+    Route::get('/generate-report', [TeamLeadController::class, 'generateReport'])->name('team-lead.generate-report');
+});
+
+// Team Member Routes
+Route::prefix('team-member')->middleware(['auth', 'role:team_member'])->group(function () {
+    Route::get('/dashboard', [TeamMemberController::class, 'dashboard'])->name('team-member.dashboard');
+    Route::post('/tasks/{task}/update-status', [TaskController::class, 'updateStatus'])
+        ->name('tasks.update-status');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('analytics')->middleware(['auth', 'role:admin,team_lead'])->group(function () {
+    Route::post('/download-report', [AnalyticsController::class, 'downloadReport'])->name('analytics.download-report');
+    Route::post('/generate-report', [AnalyticsController::class, 'generateReport']);
+});
+
+require __DIR__.'/auth.php';
