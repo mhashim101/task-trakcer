@@ -34,20 +34,20 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    protected static function booted()
-    {
-        static::updated(function ($task) {
-            foreach ($task->getDirty() as $field => $newValue) {
-                TaskHistory::create([
-                    'task_id' => $task->id,
-                    'changed_by' => auth()->id(),
-                    'field_name' => $field,
-                    'old_value' => $task->getOriginal($field),
-                    'new_value' => $newValue,
-                ]);
-            }
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::updated(function ($task) {
+    //         foreach ($task->getDirty() as $field => $newValue) {
+    //             TaskHistory::create([
+    //                 'task_id' => $task->id,
+    //                 'changed_by' => auth()->id(),
+    //                 'field_name' => $field,
+    //                 'old_value' => $task->getOriginal($field),
+    //                 'new_value' => $newValue,
+    //             ]);
+    //         }
+    //     });
+    // }
 
     public function histories()
     {

@@ -79,13 +79,27 @@
                                 <x-icons.report class="flex-shrink-0 h-6 w-6" />
                                 <span class="ml-3">Generate Reports</span>
                             </x-sidebar.link>
+                            <x-sidebar.link href="{{ route('task-history.index') }}" :active="request()->routeIs('task-history.*')">
+                                <x-icons.history class="flex-shrink-0 h-6 w-6" />
+                                <span class="ml-3">Task History</span>
+                            </x-sidebar.link>
+
+
                         @endif
                     @endauth
 
-                    <x-sidebar.link href="#" :active="false">
+                    {{-- <x-sidebar.link href="#" :active="false">
                         <x-icons.history class="flex-shrink-0 h-6 w-6" />
                         <span class="ml-3">Task History</span>
-                    </x-sidebar.link>
+                    </x-sidebar.link> --}}
+                    @auth
+                        @if (auth()->user()->role_id == 3)
+                            <x-sidebar.link href="{{ route('my-task-history') }}" :active="request()->routeIs('my-task-history')">
+                                <x-icons.user-history class="flex-shrink-0 h-6 w-6" />
+                                <span class="ml-3">My Activities</span>
+                            </x-sidebar.link>
+                        @endif
+                    @endauth
                 </x-sidebar.section>
             </nav>
         </div>

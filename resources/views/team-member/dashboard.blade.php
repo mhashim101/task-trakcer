@@ -28,7 +28,11 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($tasks as $task)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $task->title }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <a href="{{ route('team-member.tasks-show', $task->id) }}" class="font-medium text-blue-600 hover:text-blue-900">
+                                                {{ $task->title }}
+                                            </a>
+                                        </td>
                                         <td class="px-6 py-4">{{ Str::limit($task->description, 50) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

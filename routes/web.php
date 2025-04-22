@@ -4,10 +4,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskHistoryController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamLeadController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', function () {
@@ -52,12 +54,18 @@ Route::prefix('team-member')->middleware(['auth', 'role:team_member'])->group(fu
     Route::get('/dashboard', [TeamMemberController::class, 'dashboard'])->name('team-member.dashboard');
     Route::post('/tasks/{task}/update-status', [TaskController::class, 'updateStatus'])
         ->name('tasks.update-status');
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('team-member.tasks-show');
+
+
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/task-history', [TaskHistoryController::class, 'index'])->name('task-history.index');
+    Route::get('/tasks/{task}/history', [TaskHistoryController::class, 'taskHistory'])->name('tasks.history');
+    Route::get('/my-task-history', [TaskHistoryController::class, 'userHistory'])->name('my-task-history');
 });
 
 Route::prefix('analytics')->middleware(['auth', 'role:admin,team_lead'])->group(function () {
