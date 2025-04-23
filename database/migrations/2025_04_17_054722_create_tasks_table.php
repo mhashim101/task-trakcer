@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('assigned_to')->constrained('users'); // team member
             $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
             $table->date('due_date')->nullable();
+            $table->string('completion_notes')->nullable();
             $table->timestamps();
         });
     }

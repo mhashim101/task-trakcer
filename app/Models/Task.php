@@ -16,7 +16,8 @@ class Task extends Model
         'assigned_by',
         'assigned_to',
         'status',
-        'due_date'
+        'due_date',
+        'completion_notes'
     ];
 
     public function team()
@@ -52,5 +53,11 @@ class Task extends Model
     public function histories()
     {
         return $this->hasMany(TaskHistory::class)->latest();
+    }
+
+    // app/Models/Task.php
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class);
     }
 }

@@ -3,12 +3,14 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskAttachmentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskHistoryController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamLeadController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -59,6 +61,11 @@ Route::prefix('team-member')->middleware(['auth', 'role:team_member'])->group(fu
 
 });
 
+Route::prefix('analytics')->middleware(['auth', 'role:admin,team_lead'])->group(function () {
+    Route::post('/download-report', [AnalyticsController::class, 'downloadReport'])->name('analytics.download-report');
+    Route::post('/generate-report', [AnalyticsController::class, 'generateReport']);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -66,11 +73,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/task-history', [TaskHistoryController::class, 'index'])->name('task-history.index');
     Route::get('/tasks/{task}/history', [TaskHistoryController::class, 'taskHistory'])->name('tasks.history');
     Route::get('/my-task-history', [TaskHistoryController::class, 'userHistory'])->name('my-task-history');
+    Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])
+        ->name('tasks.complete');
+
+    Route::delete('/attachments/{attachment}', [TaskAttachmentController::class, 'destroy'])
+        ->name('attachments.destroy');
+    Route::get('/attachments/{attachment}', [TaskAttachmentController::class, 'show'])
+    ->name('attachments.show');
 });
 
-Route::prefix('analytics')->middleware(['auth', 'role:admin,team_lead'])->group(function () {
-    Route::post('/download-report', [AnalyticsController::class, 'downloadReport'])->name('analytics.download-report');
-    Route::post('/generate-report', [AnalyticsController::class, 'generateReport']);
-});
 
 require __DIR__.'/auth.php';
