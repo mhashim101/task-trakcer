@@ -46,10 +46,21 @@
                                             <form action="{{ route('tasks.update-status', $task->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 {{-- @method('PATCH') --}}
-                                                <select name="status" onchange="this.form.submit()" class="rounded border-gray-300">
-                                                    <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="in_progress" {{ $task->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                                    <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                                                <select name="status" class="rounded border-gray-300" onchange="handleStatusChange(this, {{ $task->id }})">
+                                                    <option value="pending"
+                                                        {{ $task->status === 'pending' ? 'selected' : '' }}
+                                                        {{ $task->status !== 'pending' ? 'disabled' : '' }}>
+                                                        Pending
+                                                    </option>
+                                                    <option value="in_progress"
+                                                        {{ $task->status === 'in_progress' ? 'selected' : '' }}
+                                                        {{ $task->status === 'completed' ? 'disabled' : '' }}>
+                                                        In Progress
+                                                    </option>
+                                                    <option value="completed"
+                                                        {{ $task->status === 'completed' ? 'selected' : '' }}>
+                                                        Completed
+                                                    </option>
                                                 </select>
                                             </form>
                                         </td>
@@ -57,10 +68,29 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="mt-4">
+                                {{ $tasks->links() }}
+                            </div>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function handleStatusChange(selectElement, taskId) {
+            const selectedStatus = selectElement.value;
+
+            if (selectedStatus === 'completed') {
+                if (confirm("Do you want to upload a file for this task?")) {
+                    window.location.href = `/team-member/tasks/${taskId}`; // Customize route as needed
+                    return;
+                }
+            }
+
+            // Submit the form normally if not uploading
+            selectElement.form.submit();
+        }
+    </script>
 </x-app-layout>

@@ -77,7 +77,7 @@
                     @endif
 
                     <div class="flex items-center justify-end space-x-4 mt-6">
-                        @if(auth()->user()->isTeamLead() || auth()->user()->isAdmin())
+                        @if(auth()->user()->isTeamLead())
                             <a href="{{ route('tasks.edit', $task->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Edit Task</a>
                         @endif
                         <a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded">Back</a>

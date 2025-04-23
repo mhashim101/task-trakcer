@@ -30,6 +30,22 @@
                                 <x-icons.analytics class="flex-shrink-0 h-6 w-6" />
                                 <span class="ml-3">Member Analytics</span>
                             </x-sidebar.link>
+
+                            <!-- 👤 User Management Section -->
+                            <x-sidebar.section title="User Management">
+                                <x-sidebar.link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.index')">
+                                    <x-icons.user class="flex-shrink-0 h-6 w-6" />
+                                    <span class="ml-3">All Users</span>
+                                </x-sidebar.link>
+                                <x-sidebar.link href="{{ route('admin.users.create') }}" :active="request()->routeIs('admin.users.create')">
+                                    <x-icons.add-user class="flex-shrink-0 h-6 w-6" />
+                                    <span class="ml-3">Add New User</span>
+                                </x-sidebar.link>
+                                {{-- <x-sidebar.link href="{{ route('admin.users.edit') }}" :active="request()->routeIs('admin.roles.index')">
+                                    <x-icons.roles class="flex-shrink-0 h-6 w-6" />
+                                    <span class="ml-3">Manage Roles</span>
+                                </x-sidebar.link> --}}
+                            </x-sidebar.section>
                         </x-sidebar.section>
                     @endif
                 @endauth

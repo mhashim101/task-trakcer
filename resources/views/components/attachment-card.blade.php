@@ -3,10 +3,10 @@
         <div class="flex items-center">
             @if(str_starts_with($attachment->mime_type, 'image/'))
                 <div class="relative group">
-                    <img src="{{ Storage::url($attachment->file_path) }}"
+                    <img src="{{ '/storage/'.$attachment->file_path }}"
                          alt="{{ $attachment->original_name }}"
                          class="w-16 h-16 object-cover rounded mr-4 cursor-pointer"
-                         onclick="openImageViewer('{{ Storage::url($attachment->file_path) }}')">
+                         onclick="openImageViewer('{{ '/storage/'.$attachment->file_path }}')">
                          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded mr-4 pointer-events-none"></div>                        </div>
             @else
                 <div class="w-16 h-16 bg-gray-100 rounded mr-4 flex items-center justify-center">
@@ -26,9 +26,8 @@
         </div>
 
         <div class="flex space-x-2">
-            <a href="{{ Storage::url($attachment->file_path) }}"
-               class="text-blue-500 hover:text-blue-700"
-               @if(str_starts_with($attachment->mime_type, 'image/')) download="{{ $attachment->original_name }}" @endif>
+            <a href="{{ '/storage/'.$attachment->file_path }}"
+               class="text-blue-500 hover:text-blue-700" download="{{ $attachment->original_name }}">
                 Download
             </a>
 

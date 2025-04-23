@@ -81,7 +81,13 @@ class TeamController extends Controller
 
     public function destroy(Team $team)
     {
+        // Detach all users from the pivot table first
+        $team->users()->detach();
+
+        // Now safely delete the team
         $team->delete();
+
         return redirect()->route('teams.index')->with('success', 'Team deleted successfully.');
     }
+
 }
