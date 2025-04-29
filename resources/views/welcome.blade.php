@@ -521,7 +521,7 @@
                 </div>
             </div>
             <div class="copyright">
-                &copy; 2023 TaskTracker. All rights reserved.
+                &copy; 2025 TaskTracker. All rights reserved.
             </div>
         </div>
     </footer>

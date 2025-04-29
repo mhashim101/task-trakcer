@@ -40,7 +40,7 @@
             </div>
 
             @stack('scripts')
-            <script>
+            {{-- <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     document.querySelectorAll('.img-click').forEach(img => {
                         img.addEventListener('click', function () {
@@ -66,7 +66,7 @@
                 document.getElementById('imageViewerModal').addEventListener('click', function(e) {
                     if (e.target === this) closeImageViewer();
                 });
-                </script>
+                </script> --}}
         </div>
     </body>
 </html>

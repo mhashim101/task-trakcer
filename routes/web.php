@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -92,7 +93,6 @@ Route::middleware('auth')->group(function () {
         ->name('attachments.destroy');
     Route::get('/attachments/{attachment}', [TaskAttachmentController::class, 'show'])
     ->name('attachments.show');
+
 });
-
-
 require __DIR__.'/auth.php';
