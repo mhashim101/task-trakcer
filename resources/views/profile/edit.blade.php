@@ -1,4 +1,13 @@
 <x-app-layout>
+    @section('title')
+        @if (auth()->id() == 1)
+            Admin - Profile
+        @elseif (auth()->id() == 2)
+            Team Lead - Profile
+        @else
+            Member - Profile
+        @endif
+    @endsection
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Profile') }}

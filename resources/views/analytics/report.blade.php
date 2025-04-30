@@ -1,4 +1,11 @@
 <x-app-layout>
+    @section('title')
+        @if (auth()->id() == 1)
+            Admin - Member Report
+        @else
+            Team Lead - Member Report
+        @endif
+    @endsection
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Generate Member Report') }}

@@ -1,4 +1,11 @@
 <x-app-layout>
+    @section('title')
+        @if (auth()->id() == 1)
+            Admin Users - Member Performance
+        @else
+            Team Lead - Member Performance
+        @endif
+    @endsection
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Team Member Analytics') }}

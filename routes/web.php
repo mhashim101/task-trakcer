@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceReportController;
+use App\Http\Controllers\AttendanceSettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskAttachmentController;
 use App\Http\Controllers\TaskController;
@@ -11,6 +14,9 @@ use App\Http\Controllers\TeamLeadController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 
@@ -93,6 +99,23 @@ Route::middleware('auth')->group(function () {
         ->name('attachments.destroy');
     Route::get('/attachments/{attachment}', [TaskAttachmentController::class, 'show'])
     ->name('attachments.show');
+
+     // Individual attendance
+     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.check-in');
+     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.check-out');
+
+     // Team attendance (for team leads and admin)
+     Route::get('/attendance/team', [AttendanceController::class, 'teamAttendance'])->name('attendance.team');
+
+     // Reports
+     Route::get('/attendance/report/{user?}', [AttendanceReportController::class, 'userReport'])->name('attendance.report');
+
+     // Settings (admin only)
+     Route::middleware(['can:admin'])->group(function () {
+         Route::get('/attendance/settings', [AttendanceSettingController::class, 'edit'])->name('attendance.settings');
+         Route::put('/attendance/settings', [AttendanceSettingController::class, 'update'])->name('attendance.settings.update');
+     });
 
 });
 require __DIR__.'/auth.php';

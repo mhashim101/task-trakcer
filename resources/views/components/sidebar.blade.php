@@ -69,7 +69,7 @@
                                 <x-sidebar.link href="{{ route('team-lead.member-analytics') }}" :active="request()->routeIs('team-lead.member-analytics')">
                                     <span class="ml-9">Team Analytics</span>
                                 </x-sidebar.link>
-                                <x-sidebar.link href="{{ route('team-lead.attendance') }}" :active="request()->routeIs('team-lead.attendance')">
+                                <x-sidebar.link href="{{ route('attendance.team') }}" :active="request()->routeIs('attendance.team')">
                                     <span class="ml-9">Team Attendance</span>
                                 </x-sidebar.link>
                             </div>
@@ -95,11 +95,36 @@
                         </div>
                     @endif
 
+                    <!-- Attendance -->
+                    <div>
+                        <button @click="openSections.attendance = !openSections.attendance"
+                            class="w-full flex items-center px-2 py-2 text-sm font-medium text-white hover:bg-gray-700 rounded-md">
+                            <x-icons.clock class="flex-shrink-0 h-6 w-6" />
+                            <span class="ml-3">Attendance</span>
+                        </button>
+                        <div x-show="openSections.attendance" class="space-y-1 ml-4">
+                            @if(auth()->user()->role_id == 2 || auth()->user()->role_id == 3)
+                                <x-sidebar.link href="{{ route('attendance.index') }}" :active="request()->routeIs('attendance.index')">
+                                    <span class="ml-9">My Attendance</span>
+                                </x-sidebar.link>
+                            @endif
+                            @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+                                <x-sidebar.link href="{{ route('attendance.team') }}" :active="request()->routeIs('attendance.team')">
+                                    <span class="ml-9">Team Attendance</span>
+                                </x-sidebar.link>
+                            @endif
+                            @if(auth()->user()->role_id == 1)
+                                <x-sidebar.link href="{{ route('attendance.settings') }}" :active="request()->routeIs('attendance.settings')">
+                                    <span class="ml-9">Settings</span>
+                                </x-sidebar.link>
+                            @endif
+                        </div>
+                    </div>
 
                     <!-- My Activity -->
                     @if (auth()->user()->role_id == 3)
                         <div>
-                            <button @click="openSections.myActiviy = !openSections.myActivity"
+                            <button @click="openSections.myActivity = !openSections.myActivity"
                                 class="w-full flex items-center px-2 py-2 text-sm font-medium text-white hover:bg-gray-700 rounded-md">
                                 <x-icons.clock class="flex-shrink-0 h-6 w-6" />
                                 <span class="ml-3">My Activity</span>
@@ -107,6 +132,9 @@
                             <div x-show="openSections.myActivity" class="space-y-1 ml-4">
                                 <x-sidebar.link href="{{ route('my-task-history') }}" :active="request()->routeIs('my-task-history')">
                                     <span class="ml-9">My Activities</span>
+                                </x-sidebar.link>
+                                <x-sidebar.link href="{{ route('attendance.index') }}" :active="request()->routeIs('attendance.index')">
+                                    <span class="ml-9">My Attendance</span>
                                 </x-sidebar.link>
                             </div>
                         </div>
@@ -131,6 +159,9 @@
                                 <x-sidebar.link href="{{ route('task-history.index') }}" :active="request()->routeIs('task-history.*')">
                                     <span class="ml-9">Task History</span>
                                 </x-sidebar.link>
+                                {{-- <x-sidebar.link href="{{ route('attendance.report') }}" :active="request()->routeIs('attendance.report')">
+                                    <span class="ml-9">Attendance Reports</span>
+                                </x-sidebar.link> --}}
                             </div>
                         </div>
                     @endif
