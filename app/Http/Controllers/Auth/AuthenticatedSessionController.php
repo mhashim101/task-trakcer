@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
+use App\Http\Controllers\Controller;
+// use Symfony\Component\Routing\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
+// use Symfony\Component\Routing\Annotation\Route;
+// use Symfony\Component\Routing\Annotation\Route;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create()
     {
-        return view('auth.login');
+        // return view('auth.login');
+        // return Inertia::render('auth/login', [
+        //     'canResetPassword' => Route::has('password.request'),
+        //     'status' => session('status'),
+        // ]);
+
+        return Inertia::render('auth/login');
+
     }
 
     /**
@@ -28,7 +40,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return to_route('dashboard');
     }
 
     /**

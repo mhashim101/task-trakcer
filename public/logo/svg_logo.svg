@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background shape -->
+  <circle cx="100" cy="100" r="90" fill="#FF2D20" opacity="0.1" />
+  
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="#FF2D20" stroke-width="2" />
+  
+  <!-- Inner design elements -->
+  <path d="M100 30 L130 80 L100 130 L70 80 Z" fill="#FF2D20" opacity="0.9" />
+  <path d="M65 75 L100 40 L135 75 L100 110 Z" fill="#FF2D20" opacity="0.7" stroke="#FF2D20" stroke-width="1" />
+  
+  <!-- Central element -->
+  <circle cx="100" cy="100" r="20" fill="#FF2D20" />
+  <circle cx="100" cy="100" r="15" fill="white" />
+  <circle cx="100" cy="100" r="10" fill="#FF2D20" />
+  
+  <!-- Accent lines -->
+  <line x1="40" y1="100" x2="70" y2="100" stroke="#FF2D20" stroke-width="2" />
+  <line x1="130" y1="100" x2="160" y2="100" stroke="#FF2D20" stroke-width="2" />
+  
+  <!-- Small decorative elements -->
+  <circle cx="40" cy="100" r="3" fill="#FF2D20" />
+  <circle cx="160" cy="100" r="3" fill="#FF2D20" />
+  
+  <!-- Abstract swoosh lines -->
+  <path d="M30 130 Q100 170 170 130" fill="none" stroke="#FF2D20" stroke-width="2" />
+  <path d="M30 140 Q100 180 170 140" fill="none" stroke="#FF2D20" stroke-width="1.5" opacity="0.7" />
+</svg>

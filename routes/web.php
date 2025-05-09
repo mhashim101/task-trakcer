@@ -8,11 +8,15 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamLeadController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Route;
-
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return Inertia::render('Welcome');
+})->name('welcome');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -34,6 +38,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/analytics/generate-report', [AdminController::class, 'generateReport'])->name('admin.generate-report');
     Route::get('/analytics/member-performance', [AnalyticsController::class, 'memberPerformance'])->name('admin.analytics.member-performance');
     Route::post('/analytics/generate-report', [AnalyticsController::class, 'generateReport'])->name('admin.analytics.generate-report');
+    Route::post('/analytics/download-report', [AnalyticsController::class, 'downloadReport'])->name('admin.analytics.download-report');
 });
 
 // Team Lead Routes
@@ -62,7 +67,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('analytics')->middleware(['auth', 'role:admin,team_lead'])->group(function () {
     Route::post('/download-report', [AnalyticsController::class, 'downloadReport'])->name('analytics.download-report');
-    Route::post('/generate-report', [AnalyticsController::class, 'generateReport']);
+    Route::post('/generate-report', [AnalyticsController::class, 'generateReport'])->name('vue.analytics.generate-report');
 });
 
 require __DIR__.'/auth.php';

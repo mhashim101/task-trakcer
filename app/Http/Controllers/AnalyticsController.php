@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\MemberTasksExport;
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MemberTasksExport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AnalyticsController extends Controller
@@ -80,6 +82,8 @@ class AnalyticsController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
+        
+        $user = Auth::user()->id;
 
         $member = User::findOrFail($request->member_id);
         $tasks = Task::where('assigned_to', $member->id)
@@ -87,15 +91,27 @@ class AnalyticsController extends Controller
             ->with(['team', 'assignedBy'])
             ->get();
 
-        return response()->json([
+        // return response()->json([
+        //     'member' => $member,
+        //     'period' => [
+        //         'start' => $request->start_date,
+        //         'end' => $request->end_date,
+        //     ],
+        //     'total_tasks' => $tasks->count(),
+        //     'completed_tasks' => $tasks->where('status', 'completed')->count(),
+        //     'tasks' => $tasks,
+        // ]);
+
+        return Inertia::render('Reports/GenerateReport', [
+            'user' => $user,
             'member' => $member,
+            'tasks' => $tasks,
             'period' => [
                 'start' => $request->start_date,
                 'end' => $request->end_date,
             ],
             'total_tasks' => $tasks->count(),
             'completed_tasks' => $tasks->where('status', 'completed')->count(),
-            'tasks' => $tasks,
         ]);
     }
 
