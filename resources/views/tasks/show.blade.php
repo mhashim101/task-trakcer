@@ -50,8 +50,34 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end space-x-4">
-                        @if(auth()->user()->isTeamLead() || auth()->user()->isAdmin())
+                    <!-- Add this right before the action buttons -->
+                    @if($task->status === 'completed')
+                        <div class="mt-8">
+                            <h3 class="text-lg font-medium mb-2">Completion Details</h3>
+
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <h4 class="font-medium mb-2">Completion Notes</h4>
+                                <p>{{ $task->completion_notes }}</p>
+                            </div>
+
+                            @if($task->attachments->count() > 0)
+                                <h4 class="font-medium mb-2">Attachments</h4>
+                                <div class="space-y-4">
+                                    @foreach($task->attachments as $attachment)
+                                        <x-attachment-card :attachment="$attachment" />
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    @elseif(auth()->user()->id === $task->assigned_to)
+                        <div class="mt-8">
+                            <h3 class="text-lg font-medium mb-2">Mark Task as Complete</h3>
+                            <x-task-complete-form :task="$task" />
+                        </div>
+                    @endif
+
+                    <div class="flex items-center justify-end space-x-4 mt-6">
+                        @if(auth()->user()->isTeamLead())
                             <a href="{{ route('tasks.edit', $task->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Edit Task</a>
                         @endif
                         <a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded">Back</a>

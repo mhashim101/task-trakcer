@@ -47,7 +47,8 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d') : '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="{{ route('tasks.show', $task->id) }}" class="text-blue-600 hover:text-blue-900">View</a>
+                                            {{-- <a href="{{ route('tasks.show', $task->id) }}" class="text-blue-600 hover:text-blue-900">View</a> --}}
+                                            <a href="{{ route('tasks.history', $task->id) }}" class="text-blue-600 hover:text-blue-900">View</a>
                                             @if(auth()->user()->isTeamLead() || auth()->user()->isAdmin())
                                                 <a href="{{ route('tasks.edit', $task->id) }}" class="text-indigo-600 hover:text-indigo-900 ml-2">Edit</a>
                                                 <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="inline">

@@ -24,7 +24,7 @@ class User extends Authenticatable
         'role_id',
     ];
 
-    /**
+     /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
@@ -85,5 +85,10 @@ class User extends Authenticatable
     public function isTeamMember()
     {
         return $this->role_id === 3;
+    }
+
+    public function taskHistories()
+    {
+        return $this->hasMany(TaskHistory::class);
     }
 }

@@ -16,7 +16,8 @@ class Task extends Model
         'assigned_by',
         'assigned_to',
         'status',
-        'due_date'
+        'due_date',
+        'completion_notes'
     ];
 
     public function team()
@@ -34,23 +35,29 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    protected static function booted()
-    {
-        static::updated(function ($task) {
-            foreach ($task->getDirty() as $field => $newValue) {
-                TaskHistory::create([
-                    'task_id' => $task->id,
-                    'changed_by' => auth()->id(),
-                    'field_name' => $field,
-                    'old_value' => $task->getOriginal($field),
-                    'new_value' => $newValue,
-                ]);
-            }
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::updated(function ($task) {
+    //         foreach ($task->getDirty() as $field => $newValue) {
+    //             TaskHistory::create([
+    //                 'task_id' => $task->id,
+    //                 'changed_by' => auth()->id(),
+    //                 'field_name' => $field,
+    //                 'old_value' => $task->getOriginal($field),
+    //                 'new_value' => $newValue,
+    //             ]);
+    //         }
+    //     });
+    // }
 
     public function histories()
     {
         return $this->hasMany(TaskHistory::class)->latest();
+    }
+
+    // app/Models/Task.php
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class);
     }
 }

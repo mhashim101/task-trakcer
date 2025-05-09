@@ -10,17 +10,7 @@ class TeamMemberController extends Controller
 {
     public function dashboard()
     {
-        // $tasks = auth()->user()->assignedTasks()->get();
-        // return view('team-member.dashboard', compact('tasks'));
-
-
         $tasks = auth()->user()->assignedTasks()->get();
-        return Inertia::render('teamMember/dashboard', [
-            'tasks' => $tasks,
-            'flash' => [
-                'success' => session('success')
-            ],
-        ]);
-
+        return view('team-member.dashboard', compact('tasks'));
     }
 }

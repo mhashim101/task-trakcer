@@ -72,6 +72,7 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
+<<<<<<< HEAD
         // return view('tasks.show', compact('task'));
 
         $task->load(['team', 'assignedBy', 'assignedTo']); // Ensure relationships are loaded
@@ -82,6 +83,10 @@ class TaskController extends Controller
                 'user' => auth()->user(),
             ],
         ]);
+=======
+        $task->load('attachments.user');
+        return view('tasks.show', compact('task'));
+>>>>>>> 7a6e778683d6a30636388f0cf29f63f3305b9925
     }
 
     public function edit(Task $task)
@@ -118,14 +123,70 @@ class TaskController extends Controller
         return to_route('dashboard')->with('success', 'Task deleted successfully.');
     }
 
+    // app/Http/Controllers/TaskController.php
     public function updateStatus(Request $request, Task $task)
     {
         $request->validate([
             'status' => 'required|in:pending,in_progress,completed',
+            'completion_notes' => 'nullable|string',
+            'attachments.*' => 'sometimes|file|max:10240'
         ]);
 
         $task->update(['status' => $request->status]);
 
-        return back()->with('success', 'Task status updated successfully.');
+        // Record completion notes if provided
+        if ($request->status === 'completed' && $request->completion_notes) {
+            $task->update(['completion_notes' => $request->completion_notes]);
+        }
+
+        // Handle file uploads
+        if ($request->hasFile('attachments') && $request->status === 'completed') {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('task_attachments');
+
+                $task->attachments()->create([
+                    'user_id' => auth()->id(),
+                    'file_path' => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getClientMimeType(),
+                    'description' => $request->description ?? 'Task completion attachment'
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Task status updated successfully');
     }
+
+    public function complete(Request $request, Task $task)
+    {
+        $request->validate([
+            'completion_notes' => 'required|string',
+            'attachments.*' => 'nullable|file|max:5120', // 5MB max
+        ]);
+
+        // Update task status and completion notes
+        $task->update([
+            'status' => 'completed',
+            'completion_notes' => $request->completion_notes,
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('task_attachments');
+
+                $task->attachments()->create([
+                    'user_id' => auth()->id(),
+                    'file_path' => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getClientMimeType(),
+                ]);
+            }
+        }
+
+        return redirect()->route('team-member.tasks-show', $task)
+            ->with('success', 'Task marked as complete with attachments');
+    }
+
+
 }

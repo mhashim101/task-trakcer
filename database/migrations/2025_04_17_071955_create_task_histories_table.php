@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('task_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained();
-            $table->foreignId('changed_by')->constrained('users');
-            $table->string('field_name');
-            $table->text('old_value')->nullable();
-            $table->text('new_value')->nullable();
+            $table->foreignId('task_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('event_type'); // created, updated, status_changed, etc.
+            $table->json('old_values')->nullable();
+            $table->json('new_values')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
